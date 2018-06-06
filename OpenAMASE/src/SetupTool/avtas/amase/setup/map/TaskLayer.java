@@ -68,6 +68,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+//added for teas
+import uxas.projects.teas.GPSDeniedZone;
+
 
 /**
  * Creates a MapLayer that allows for the editing of Search Tasks
@@ -79,6 +82,8 @@ public class TaskLayer extends EditableLayer<GraphicEditor> implements AppEventL
     private static Painter searchPainter = Painter.createOutlinePainter(Color.GREEN, Color.WHITE, 1f);
     private static Painter keepOutPainter = Painter.createOutlinePainter(Color.RED, Color.WHITE, 1f);
     private static Painter keepInPainter = Painter.createOutlinePainter(Color.YELLOW, Color.WHITE, 1f);
+    //added for teas
+    private static Painter gpsDeniedPainter = Painter.createOutlinePainter(Color.MAGENTA, Color.WHITE, 1f);
     static float DEFAULT_ZONE_ALT = 5000;
     private AppEventManager eventMgr = null;
     MapText tipText = new MapText();
@@ -315,6 +320,12 @@ public class TaskLayer extends EditableLayer<GraphicEditor> implements AppEventL
             g = CmasiShapes.getMapShape(((KeepInZone) z).getBoundary());
             g.setPainter(keepInPainter);
         }
+        if (z instanceof GPSDeniedZone) {
+            g = CmasiShapes.getMapShape(((GPSDeniedZone) z).getBoundary());
+            Color fill = new Color(255, 0, 255, 50);
+            g.setFill(fill);
+            g.setPainter(gpsDeniedPainter);
+        }
         if (g != null) {
             g.setRefObject(z);
             return wrapEditor(g);
@@ -405,6 +416,14 @@ public class TaskLayer extends EditableLayer<GraphicEditor> implements AppEventL
             }
             else if (obj instanceof KeepInZone) {
                 KeepInZone z = (KeepInZone) obj;
+                z.setBoundary(CmasiShapes.mapShapeToCMASI(shape.getGraphic()));
+                if (z.getMaxAltitude() == 0 && z.getMinAltitude() == 0) {
+                    z.setMaxAltitude(DEFAULT_ZONE_ALT); //DEFAULT VALUE
+                }
+                fireUpdate(z);
+            }
+            else if (obj instanceof GPSDeniedZone) {
+                GPSDeniedZone z = (GPSDeniedZone) obj;
                 z.setBoundary(CmasiShapes.mapShapeToCMASI(shape.getGraphic()));
                 if (z.getMaxAltitude() == 0 && z.getMinAltitude() == 0) {
                     z.setMaxAltitude(DEFAULT_ZONE_ALT); //DEFAULT VALUE

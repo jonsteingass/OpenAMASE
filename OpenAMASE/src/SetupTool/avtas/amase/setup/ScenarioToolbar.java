@@ -34,6 +34,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JToolBar;
+//added for teas project
+import uxas.projects.teas.GPSDeniedZone;
 
 /**
  * A toolbar that triggers the creation of objects on map layers that are interested.
@@ -92,12 +94,23 @@ public class ScenarioToolbar extends AmasePlugin {
         z = new KeepOutZone();
         z.setBoundary(new Circle());
         toolbar.add(createButton("/resources/circ_keepout.png", "Add a Circular Keep-Out Zone", z));
+        
+        z = new GPSDeniedZone();
+        z.setBoundary(new Polygon());
+        toolbar.add(createButton("/resources/poly_gpsdenied.png", "Add a GPS-Denied Zone", z));
+        z = new GPSDeniedZone();
+        z.setBoundary(new Rectangle());
+        toolbar.add(createButton("/resources/square_gpsdenied.png", "Add a Rectangular GPS-Denied Zone", z));
+        z = new GPSDeniedZone();
+        z.setBoundary(new Circle());
+        toolbar.add(createButton("/resources/circ_gpsdenied.png", "Add a Circular GPS-Denied Zone", z));
     }
 
     
     
 
     JButton createButton(final String icon, final String tooltip, final LMCPObject newObj) {
+        System.out.println(String.valueOf(getClass().getResource(icon)));
         final JButton button = new JButton(new ImageIcon(getClass().getResource(icon)));
         button.setToolTipText(tooltip);
         button.setBorderPainted(false);

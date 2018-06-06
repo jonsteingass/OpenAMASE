@@ -35,6 +35,9 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+//added for teas
+import uxas.projects.teas.GPSDeniedZone;
+
 
 /**
  *
@@ -98,6 +101,16 @@ public class ScenarioToolbarLayer extends ControlLayer {
         z = new KeepOutZone();
         z.setBoundary(new Circle());
         toolbar.add(createButton("/resources/circ_keepout.png", "Add a Circular Keep-Out Zone", z));
+        
+        z = new GPSDeniedZone();
+        z.setBoundary(new Polygon());
+        toolbar.add(createButton("/resources/poly_gpsdenied.png", "Add a GPS-Denied Zone", z));
+        z = new GPSDeniedZone();
+        z.setBoundary(new Rectangle());
+        toolbar.add(createButton("/resources/square_gpsdenied.png", "Add a Rectangular GPS-Denied Zone", z));
+        z = new GPSDeniedZone();
+        z.setBoundary(new Circle());
+        toolbar.add(createButton("/resources/circ_gpsdenied.png", "Add a Circular GPS-Denied Zone", z));
     }
 
     
@@ -118,6 +131,9 @@ public class ScenarioToolbarLayer extends ControlLayer {
                     if (newObj != null) {
                         sendObj = newObj.clone();
                     }
+                    ToolbarEvent tbEvent = new ToolbarEvent(sendObj);
+                    ScenarioToolbarLayer stbL = ScenarioToolbarLayer.this;
+                    
                     AppEventManager.getDefaultEventManager().fireEvent(
                             new ToolbarEvent(sendObj), ScenarioToolbarLayer.this);
                 

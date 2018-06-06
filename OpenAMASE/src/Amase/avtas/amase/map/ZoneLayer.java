@@ -33,6 +33,9 @@ import java.util.ListIterator;
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
+//added for teas project
+import uxas.projects.teas.GPSDeinedZone;
+
 
 /**
  * A layer that displays CMASI zone shapes
@@ -46,10 +49,14 @@ public class ZoneLayer extends GraphicsLayer<MapGraphic> implements AppEventList
     //Color keepInLine = Color.YELLOW;
     Color keepInFill = Colors.setAlpha(Color.YELLOW, 0.3);
     //Stroke zoneStroke = new BasicStroke(1f);
+    //added for teas project
+    Color gpsDeniedFill = Colors.setAlpha(Color.MAGENTA, 0.3);
     
     protected static Painter keepOutPainter = Painter.createOutlinePainter(Color.RED, Color.WHITE, 1f);
     protected static Painter keepInPainter = Painter.createOutlinePainter(Color.YELLOW, Color.WHITE, 1f);
-
+    //added for teas project
+    protected static Painter gpsDeniedPainter = Painter.createOutlinePainter(Color.MAGENTA, Color.WHITE, 1f);
+    
     public ZoneLayer() {
         AppEventManager.getDefaultEventManager().addListener(this);
     }
@@ -96,6 +103,12 @@ public class ZoneLayer extends GraphicsLayer<MapGraphic> implements AppEventList
         }
         else if (zone instanceof KeepInZone) {
             g.setPainter(keepInPainter);
+        }
+        else if (zone instanceof uxas.projects.teas.GPSDeniedZone) { //added for teas project
+            if(!(g instanceof MapPoly) || ((MapPoly) g).isPolygon()) {
+                g.setFill(gpsDeniedFill);
+            }
+            g.setPainter(gpsDeniedPainter);
         }
 
         //g.setStroke(zoneStroke);
